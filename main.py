@@ -56,6 +56,11 @@ async def create_post(post:PostBase, db:db_dependancy):
     db.commit()
     
 
+@app.get('/posts/', status_code=status.HTTP_200_OK)
+async def get_all_posts(db:db_dependancy):
+    posts=db.query(models.Post).all()
+    return posts
+
 @app.get('/posts/{user_id}', status_code=status.HTTP_200_OK,  response_model=PostBase)
 async def get_post(post_id:PostBase, db:db_dependancy):
     post=db.query(models.Post).filter(models.Post.id==post_id).first()
