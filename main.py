@@ -41,7 +41,7 @@ async def create_user(user: UserBase, db: db_dependancy):
     db.refresh(db_user)  
     return db_user  
 
-@app.get('/users/{user_id}', status_code=status.HTTP_200_OK,  response_model=UserSchema)
+@app.get('/user/{user_id}', status_code=status.HTTP_200_OK,  response_model=UserSchema)
 async def get_user(user_id:int, db:db_dependancy):
     user=db.query(models.User).filter(models.User.id==user_id).first()
     if user is None:
@@ -61,14 +61,14 @@ async def get_all_posts(db:db_dependancy):
     posts=db.query(models.Post).all()
     return posts
 
-@app.get('/posts/{user_id}', status_code=status.HTTP_200_OK,  response_model=PostBase)
+@app.get('/post/{user_id}', status_code=status.HTTP_200_OK,  response_model=PostBase)
 async def get_post(post_id:PostBase, db:db_dependancy):
     post=db.query(models.Post).filter(models.Post.id==post_id).first()
     if post is  None:
         HTTPException(status_code=400, detail="Post not found")
     return post
 
-@app.delete('/posts/{user_id}', status_code=status.HTTP_200_OK)
+@app.delete('/post/{user_id}', status_code=status.HTTP_200_OK)
 async def delete_post(Post_id:int, db:db_dependancy):
     db_post=db.query(models.Post).filter(models.Post.id==Post_id).first()
     if db_post is None:
@@ -77,3 +77,6 @@ async def delete_post(Post_id:int, db:db_dependancy):
     db.delete(db_post)
     db.commit()
     
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="localhost", port=8000)
